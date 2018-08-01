@@ -111,10 +111,8 @@ cc.Class({
 
     moveForward() {
         var moveDisV = cc.Vec2.RIGHT.mul(this.maxSpeed * 10);
-        // cc.log("maxSpeed==========", moveDisV);
         this.move.targetPos = this.node.position.add(moveDisV);
         this.curStaus = CatStatus.moving;
-        cc.log("moveForward==========", moveDisV);
     },
 
     // LIFE-CYCLE CALLBACKS:

@@ -28,7 +28,7 @@ cc.Class({
                 return this._targetPos;
             },
             set(value){
-                cc.log("Move to Target: ", value);
+                //cc.log("Move to Target: ", value);
                 this._targetPos = value;
                 this.moveType = 2;
             },

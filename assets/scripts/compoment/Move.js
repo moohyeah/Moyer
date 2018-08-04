@@ -84,7 +84,7 @@ cc.Class({
 
         this.speed = this.maxMoveSpeed;
         var moveDist = dir.mul(dt * this.speed);
-        cc.log("=============moving dir", dt, dt * this.speed); 
+        // cc.log("=============moving dir", dt, dt * this.speed); 
         // 根据当前速度更新主角的位置
         // this.node.x += this.xSpeed * dt;
         this.node.position =  this.node.position.add(moveDist);

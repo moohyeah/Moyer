@@ -12,25 +12,32 @@ cc.Class({
     },
 
     // LIFE-CYCLE CALLBACKS:
-
     onLoad () {
+        this._curScene = this.getComponent("Scene");
         this._time = this.totoalTime;
     },
 
     start () {
-        this.startTimer();
     },
 
-    startTimer(){
-        if (this.totoalTime > 0) {
-            this.schedule(this.updateTimer, 1, this.totoalTime);
-        }
+    update (dt) {
+        if (this._time <= 0 || this._curScene.status != 0) return;
+        this._time -= dt;
+    },
+    // End LIFE-CYCLE CALLBACKS:
+
+    timeStr(){
+        return cc.js.formatStr("%s:%s", this.zeroize(parseInt(this._time/60)) ,  this.zeroize(parseInt(this._time%60)))
     },
 
-    updateTimer(){
-        this._time = this._time - 1;
-        // cc.log("==============Timer: %d", this._time);
+    zeroize(value, length){
+        if (!length) {  
+            length = 2;  
+        }  
+        value = value + "";  
+        for (var i = 0, zeros = ''; i < (length - value.length); i++) {  
+            zeros += '0';  
+        }  
+        return zeros + value;  
     },
-
-    // update (dt) {},
 });

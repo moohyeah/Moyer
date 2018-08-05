@@ -3,6 +3,10 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        curScene: {
+            default: null,       
+            type: require("Scene"),
+        }
         // totoalTime: 0,
         // foo: {
         //     // ATTRIBUTES:
@@ -24,23 +28,42 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.timer = this.getComponent("timer");
+        this.timer = this.curScene.getComponent("timer");
         this._timeLabel = cc.find("time", this.node).getComponent(cc.Label);
     },
 
     start () {
-        // this.startTimer();
-    },
-
-    startTimer(){
-        // this.schedule(this.updateTimer, 1, );
-    },
-
-    updateTimer(){
-        this._timeLabel.string = cc.js.formatStr("%d:%d",  this.timer.leftTime/60,  this.timer.leftTime%60)
     },
 
     update (dt) {
-        this. updateTimer();
+        if (this.curScene.status != 0) {
+            return;
+        }
+        switch (this.curScene.status) {
+            case 0:
+                this.updateTimer();
+                break;
+            case 1:
+                this.success();
+                break;
+            case 2:
+                this.fail();
+                break;
+            case 3:
+                this.puase();
+                break;                
+            default:
+                break;
+        }
+        
     },
+
+    updateTimer(){
+        this._timeLabel.string = this.timer.timeStr();
+    },
+
+    puase(){},
+    success(){},
+    fail(){},
+
 });

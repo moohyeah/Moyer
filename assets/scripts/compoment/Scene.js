@@ -26,17 +26,25 @@ cc.Class({
     // TODO 关卡初始化工作
     onLoad () {
         this._objs = {};
-        this.timer = this.getComponent("timer");
         this._status = SceneStatus.idle;
     },
 
     start () {
+        this.timer = this.getComponent("timer");
     },
 
     update (dt) {
-        if (this.timer.leftTime <= 0) {
+        if (this.timer.leftTime <= 0 && this._status == SceneStatus.idle) {
             this.gameOver();
         }
+    },
+
+    register(obj) {
+        this._objs[obj.id] = obj;
+    },
+
+    unregister(obj) {
+        this._objs[obj.id] = null;
     },
 
     gameOver(){

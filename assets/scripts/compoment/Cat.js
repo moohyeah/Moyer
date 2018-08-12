@@ -7,6 +7,7 @@ var CatStatus = {
     eating :2,
     playing:3,
     sleeping:4,
+    scared:5,
 }
 
 // 小短腿在此
@@ -35,10 +36,13 @@ cc.Class({
             default: CatStatus.idle,
             type: cc.Enum(CatStatus),
         }
-
     },
 
-    getpPiority(obj){
+    canRadar() {
+        return this.curStaus  == CatStatus.idle || this.curStaus  == CatStatus.moving;
+    },
+
+    getPiority(obj){
         switch (obj.effectByCourage) {
             case 0:
                 return obj.priority;
@@ -80,21 +84,26 @@ cc.Class({
         }, toy.playTime);
     },
 
-    scared(){
-        var costPower = this._target.scaredCostPower - this.courage * scaredRate;
+    scared() {
+        this.curStaus = CatStatus.scared;
+        var costPower = this._target.scaredCostPower - this.courage * this.scaredRate;
         costPower = Math.max(0, costPower);
         this.power.add(-1 * costPower);
         //TODO 惊吓移动
-        var moveBackVec = cc.Vec2.RIGHT * -1 * this._target.scaredBackDis;
+        var moveBackVec =cc.Vec2.RIGHT.mul(-1 * this._target.scaredBackDis);
+        // cc.log("==============moveBack", moveBackVec);
         this.move.targetPos = this.node.position.add(moveBackVec);
-        this.curStaus = CatStatus.moving;
     },
 
     targetLisnter(target) {
         this._target = target;
+        if (target == null) {
+            this.moveForward();
+            return;
+        }
         switch (target.effectByCourage) {
             case -1:
-                this.scared()
+                this.scared();
                 break;
             case 1:
                 if (target instanceof Food) {
@@ -105,6 +114,7 @@ cc.Class({
                     this.play(target);
                 }
             default:
+                this.moveForward();
                 break;
         }
     },
@@ -117,14 +127,19 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
-    },
+    // onLoad () {
+    // },
 
     start () {
+
+        var self = this;
+
         this.power = this.getComponent("Power");
         this.move = this.getComponent("Move");
         this.radar = this.getComponent("Radar");
-        this.radar.setListener(this.targetLisnter);
+        this.radar.setListener(function(target){
+            self.targetLisnter(target);
+        });
         this.power.maxPower = this.maxPower;
         this.move.maxMoveSpeed = this.maxSpeed;
         this.move.accel = this.accel;
@@ -137,6 +152,12 @@ cc.Class({
                 break;
             case CatStatus.sleeping:
                 return;
+            case CatStatus.scared:
+                if (!this.move.moving) {
+                    cc.log("=============remove scared");
+                    this.curStaus = CatStatus.idle;
+                }
+                return;    
             default:
                 break;
         }

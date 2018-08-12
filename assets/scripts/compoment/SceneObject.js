@@ -12,6 +12,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        id:0,
         // 移动速度，敏捷
         maxSpeed:0,
         // 加速度
@@ -19,12 +20,23 @@ cc.Class({
         // 小短腿根据不同场景对象的优先级进行反应
         priority:0,
         // 是否有效
-        aviable:0,
+        aviable: true,
         // 0不受影响 1增益 2减益
         effectByCourage:0,
         //惊吓消耗体力
         scaredCostPower:0,
         //惊吓后退距离
         scaredBackDis:10,
+        scene: {
+            get() {
+                return this._scene;
+            },
+        }
+    },
+    
+    onLoad () {
+        // 注冊到scene
+        this._scene = cc.find("scene").getComponent("Scene");
+        this._scene.register(this);
     },
 });

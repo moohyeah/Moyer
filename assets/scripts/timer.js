@@ -14,6 +14,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     onLoad () {
         this._curScene = this.getComponent("Scene");
+        // cc.log("==============_curScene", this._curScene);
         this._time = this.totoalTime;
     },
 

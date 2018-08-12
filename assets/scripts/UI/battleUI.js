@@ -28,6 +28,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.curScene = cc.find("scene").getComponent("Scene");
         this.timer = this.curScene.getComponent("timer");
         this._timeLabel = cc.find("time", this.node).getComponent(cc.Label);
     },

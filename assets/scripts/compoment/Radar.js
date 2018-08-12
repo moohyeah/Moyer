@@ -13,8 +13,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
     onLoad () {
         this._obj = this.getComponent("Cat");
-        this._scene =  cc.find("Canvas").getComponent("Scene");
-        this.radius = (this._obj.curiosity * 0.1 + 1);
+        this.radius = (this._obj.curiosity * 10 + 100);
         this._target = null;
     },
     
@@ -22,38 +21,43 @@ cc.Class({
         this._listener = listener
     },
 
-    getTarget(){
+    setTarget(){
+        if (!this._obj.canRadar()) {
+            return;
+        }
         var target;
         var targetDis;
-        var objs = this._scene.objs;
+        var objs = this._obj.scene.objs;
         if (objs == null) {
             return null;
         }
-        for (let index = 0; index < objs.length; index++) {
-            const element = objs[index];
-            if (element.aviable) {
-                var dis = this._obj.node.position.sub(element.node.position).mag
-                if (dis <= radius) {
-                    if (target == null) {
-                        target = element;
-                        targetDis = dis;
-                    } else if(this._obj.getpPiority(target) < this._obj.getpPiority(element)){
-                        arget = element;
-                        targetDis = dis;
-                    } else if(this._obj.getpPiority(target) == this._obj.getpPiority(element) && targetDis < dis){
-                        arget = element;
-                        targetDis = dis;
+        for (const key in objs) {
+            if (objs.hasOwnProperty(key)) {
+                const element = objs[key];
+                if (element.aviable) {
+                    var dis = this._obj.node.position.sub(element.node.position).mag();
+                    if (dis <= this.radius) {
+                        if (target == null) {
+                            target = element;
+                            targetDis = dis;
+                        } else if(this._obj.getPiority(target) < this._obj.getPiority(element)){
+                            target = element;
+                            targetDis = dis;
+                        } else if(this._obj.getPiority(target) == this._obj.getPiority(element) && targetDis < dis){
+                            target = element;
+                            targetDis = dis;
+                        }
                     }
                 }
             }
         }
 
-        return target
+        this._target = target
     },
 
     update (dt) {
         var oldTarget = this._target;
-        this._target = this.getTarget();
+        this.setTarget();
         if (oldTarget != this._target && this._listener) {
             this._listener(this._target);
         }

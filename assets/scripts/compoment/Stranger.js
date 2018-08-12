@@ -32,6 +32,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this._super();
         this.move = this.getComponent("Move");
     },
 

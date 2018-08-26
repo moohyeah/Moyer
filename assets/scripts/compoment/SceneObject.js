@@ -27,6 +27,7 @@ cc.Class({
         scaredCostPower:0,
         //惊吓后退距离
         scaredBackDis:10,
+        aliveTime:5,
         scene: {
             get() {
                 return this._scene;
@@ -39,4 +40,17 @@ cc.Class({
         this._scene = cc.find("scene").getComponent("Scene");
         this._scene.register(this);
     },
+
+    start(){
+        if (this.aliveTime > 0) {
+            var self = this;
+            this.scheduleOnce(function(){
+                self.node.destroy()
+            }, this.aliveTime )
+        }
+    },
+
+    onDestroy(){
+        this._scene.unregister(this);
+    }
 });

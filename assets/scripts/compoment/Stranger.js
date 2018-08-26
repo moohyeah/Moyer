@@ -36,9 +36,5 @@ cc.Class({
         this.move = this.getComponent("Move");
     },
 
-    start () {
-
-    },
-
     // update (dt) {},
 });

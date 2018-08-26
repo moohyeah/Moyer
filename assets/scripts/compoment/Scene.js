@@ -45,6 +45,7 @@ cc.Class({
 
     unregister(obj) {
         this._objs[obj.id] = null;
+        delete this._objs[obj.id];
     },
 
     gameOver(){

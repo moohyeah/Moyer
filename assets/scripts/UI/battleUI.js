@@ -6,31 +6,22 @@ cc.Class({
         curScene: {
             default: null,       
             type: require("Scene"),
+        },
+        curPlayer: {
+            get(){
+                return this._curPlayer;
+            },
         }
-        // totoalTime: 0,
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         this.curScene = cc.find("scene").getComponent("Scene");
+        this._curPlayer = cc.find("Player").getComponent("Cat");
         this.timer = this.curScene.getComponent("timer");
         this._timeLabel = cc.find("time", this.node).getComponent(cc.Label);
+        this._powerLabel = cc.find("power", this.node).getComponent(cc.Label);
     },
 
     start () {
@@ -43,6 +34,7 @@ cc.Class({
         switch (this.curScene.status) {
             case 0:
                 this.updateTimer();
+                this.updateHero();
                 break;
             case 1:
                 this.success();
@@ -56,11 +48,15 @@ cc.Class({
             default:
                 break;
         }
-        
     },
 
     updateTimer(){
         this._timeLabel.string = this.timer.timeStr();
+    },
+
+    updateHero(){
+        var curPower = this._curPlayer.getComponent("Power").curPower;
+        this._powerLabel.string = "剩余体力：" + curPower;
     },
 
     puase(){},

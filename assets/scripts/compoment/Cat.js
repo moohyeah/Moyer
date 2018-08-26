@@ -131,16 +131,22 @@ cc.Class({
     // },
 
     start () {
-
+        this._super();
         var self = this;
 
         this.power = this.getComponent("Power");
         this.move = this.getComponent("Move");
         this.radar = this.getComponent("Radar");
+
         this.radar.setListener(function(target){
             self.targetLisnter(target);
         });
         this.power.maxPower = this.maxPower;
+
+        this.power.onPowerEmpty(function(){
+            self.move.stoping = true;
+        });
+
         this.move.maxMoveSpeed = this.maxSpeed;
         this.move.accel = this.accel;
     },
